@@ -244,6 +244,17 @@ public class JsonTest {
 		assertEquals("lake", zoo.animal.locales.get(1));
 	}
 
+    @Test()
+    public void testJson_deserialize_createsAnObjectWithEscapeCharacter() throws IOException {
+        String serializedZoo = "{\"name\":\"test \\\", \", \"animal\":{\"locales\":[\"ocean\",\"lake\"]}}";
+
+        Zoo zoo  = new Json().decode(serializedZoo, Zoo.class);
+
+        assertEquals(zoo.name, "test \\\", ");
+        assertEquals( zoo.animal.locales.get(0),"ocean");
+        assertEquals(zoo.animal.locales.get(1),"lake");
+    }
+
 	@Model
 	@ListOf(listClass = Zoo.class)
 	public static class ZooList extends ArrayList<Zoo> {
