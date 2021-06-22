@@ -4,6 +4,7 @@ import com.paypal.http.HttpRequest;
 import com.paypal.http.annotations.ListOf;
 import com.paypal.http.exceptions.JsonParseException;
 import com.paypal.http.exceptions.SerializeException;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -399,14 +400,15 @@ public class Json implements Serializer {
 	}
 
 	private SearchResult extractNextStringToken(char[] s, int i) {
+		String str = escapeCharArray(s);
 		int startIndex = i;
 		//also need to check whether this key barrier is escaped or not
-		if (s[i+1] == KEY_BARRIER && !isEscaped(s, i+1)) {
+		if (str.charAt(i + 1) == KEY_BARRIER && !isEscaped(str, i+1)) {
 			i += 2;
 		} else {
 			do {
 				i++;
-			} while(s[i] != KEY_BARRIER || isEscaped(s,i));
+			} while(str.charAt(i) != KEY_BARRIER || isEscaped(str,i));
 			i++;
 		}
 
@@ -414,11 +416,16 @@ public class Json implements Serializer {
 		return new SearchResult(i, val);
 	}
 
+	private String escapeCharArray(char[] s){
+		String str = String.valueOf(s);
+		str = StringEscapeUtils.unescapeJson(str);
+		return str;
+	}
 	//return true if the character is escaped.
-	private boolean isEscaped(char[] s, int i){
+	private boolean isEscaped(String s, int i){
 		//  from the API \" will be send as \\\"
 		if(i - 1 >= 0){
-			return (s[i -1] == KEY_ESCAPER);
+			return (s.charAt(i - 1) == KEY_ESCAPER);
 		} else{
 			return false;
 		}

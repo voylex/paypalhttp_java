@@ -6,6 +6,7 @@ import com.paypal.http.annotations.Model;
 import com.paypal.http.annotations.SerializedName;
 import com.paypal.http.exceptions.JsonParseException;
 import com.paypal.http.exceptions.SerializeException;
+import org.apache.commons.text.StringEscapeUtils;
 import org.testng.annotations.Test;
 
 import java.io.IOException;

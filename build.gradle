@@ -81,6 +81,7 @@ allprojects {
 project(':paypalhttp') {
     dependencies {
         testCompile project(':paypalhttp-testutils')
+        compile 'org.apache.commons:commons-text:1.1'
     }
 
     test {
